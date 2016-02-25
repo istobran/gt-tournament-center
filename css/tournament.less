@@ -1,0 +1,35 @@
+@info: #7D151E;
+@border: 1px solid #ae98af;
+@bgcolor: #e2dfd8;
+
+body {
+  background: @bgcolor;
+}
+a, a:hover{
+  color: @info;
+}
+.tournament-info {
+  margin: 10px 20px;
+  padding: 20px;
+  border: @border;
+  border-left-color: @info;
+  border-left-width: 5px;
+  border-radius: 3px;
+  transition: 0.2s;
+}
+.tournament-info:hover {
+  background: #efe8e3;
+  cursor: pointer;
+}
+.tournament-title {
+  color: @info;
+}
+.tournament-organizer {
+  height: 100%;
+}
+.progress {
+  margin-bottom: 0px;
+}
+.progress-bar-info {
+  background-color: #C24251;
+}

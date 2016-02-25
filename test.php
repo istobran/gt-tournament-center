@@ -1,32 +1,37 @@
 <?php
-function main() { //system entry
-  if (!file_exists('challonge.class.php')) {
-    echo "challonge.class.php doesn't exist!";
-    return;
+if (!file_exists('challonge.class.php')) {
+  echo "challonge.class.php doesn't exist!";
+  return;
+}
+require_once 'challonge.class.php';
+require_once 'keylist.php';
+
+function getTournamentsIdList($apiKeyList) {
+  foreach ($apiKeyList as $key => $value) {
+    $api_instance[$key] = new ChallongeAPI($value);
+    $api_instance[$key]->verify_ssl = false;
+    $tournamentsList = $api_instance[$key]->getTournaments()->tournament;
+    print_r($tournamentsList);
+    foreach ($tournamentsList as $value) {
+      // $word="start-at";
+      // echo $value->$word->getTimestamp().PHP_EOL;
+      // $phpTimestamp = strtotime(substr($value->{'created-at'}, 0, 10).' '.substr($value->{'created-at'}, 11, 8));
+      // echo date('m d, y', $phpTimestamp)."<br>";
+      //echo $value->{'created-at'}->format('u');
+      //var_dump($value->{'created-at'});
+      $idStr .= '<p>id : '.$value->id.'&nbsp;&nbsp;&nbsp;&nbsp;name : '.$value->name.'&nbsp;&nbsp;&nbsp;&nbsp;hosted by '.$key.'</p>';
+    }
   }
-  require_once 'challonge.class.php';
-  $api_instance = new ChallongeAPI('spXSd5LAddsP6O31en0ar41xMF826JHXOCIC3WiY');
-  $api_instance->verify_ssl = false;
-  // $xml = $api_instance->getTournaments();
-  // echo 'status : '.$api_instance->status_code.'<br>';
-  // var_dump($xml);
-
-  //create tournament
-  // $params = array(
-  //    "tournament[name]" => 'DFXRC first match',
-  //    "tournament[tournament_type]" => "single elimination",
-  //    "tournament[url]" => "DFXRC_first_match",
-  //    "tournament[description]" => "<strong>DFXRC</strong> is strong!"
-  // );
-  // $api_instance->createTournament( $params );
-  // print_r($api_instance->result);  //contained those tournament id data etc.
-  // print_r($api_instance->errors);
-
-  //get tournament info
-  var_dump($api_instance->getTournaments());
+  return $idStr;
 }
 
-main();
+function getParticipent($apiKeyList) {
+  $tournament_id = 2213854;
+  $api_instance = new ChallongeAPI($apiKeyList['me']);
+  $api_instance->verify_ssl = false;
+  print_r($api_instance->getParticipants($tournament_id));
+  //return NULL;
+}
  ?>
  <!DOCTYPE html>
  <html>
@@ -35,6 +40,7 @@ main();
      <title>test page</title>
    </head>
    <body>
+     <?php getParticipent($apiKeyList); ?>
      <input type="text" name="tr_name" value="" placeholder="please type your tournament name">
      <input id="submit" type="button" value="OK">
    </body>
